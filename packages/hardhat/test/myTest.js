@@ -34,28 +34,30 @@ use(solidity);
 // });
 
 const ShambitContract = artifacts.require("Shambit");
-describe("Shambit Tests", function () {
+describe("Shambit Tests", function() {
   let ct;
-  before(async function () {
-    ct = await ShambitContract.new();
+
+  before(async function() {
+    const ContractFactory = await ethers.getContractFactory("Shambit");
+    ct = await ContractFactory.deploy();
+    // ct = await ShambitContract.new();
     // runs once before the first test in this block
   });
 
-  after(function () {
+  after(function() {
     // runs once after the last test in this block
   });
 
-  beforeEach(function () {
-    console.log("inja");
+  beforeEach(function() {
     // runs before each test in this block
   });
 
-  afterEach(function () {
+  afterEach(function() {
     // runs after each test in this block
   });
 
-  describe("Events test adding, closing, editing", (accounts) => {
-    it("Should added new public  event without custom target  when gets correct inputs", async function () {
+  describe("Events test adding", (accounts) => {
+    it("Should added new public  event without custom target  when gets correct inputs", async function() {
       let event = {
         lable: "global walking event ",
         startDate: "first of jun 2021",
@@ -71,23 +73,27 @@ describe("Shambit Tests", function () {
         IpfCID: "QmdXUKh8LU75HTVhqjAMyBqQEZ9Cr7cHjBrVzjF3ixeNqZ",
         tokenName: "SBT",
       };
-      console.log("Address of sender : ",ethers.getJsonWalletAddress())
-      //   await expect(ct.addEvent(
-      //   (startDate = Date.now()),
-      //   (endDate = Date.now()),
-      //   (hStart = 3),
-      //   (mStart = 4),
-      //   (hEnd = 6),
-      //   (mEnd = 4),
-      //   (latLocation = 1222),
-      //   (longLocation = 555)
-      // )).to.emit(ct,'AddEvent')
-      // .withArgs();
+      const accounts = await ethers.getSigners();
+      let acc = accounts[0].address;
+      await expect(
+        ct.addEvent(
+          (startDate = Date.now()),
+          (endDate = Date.now()),
+          (hStart = 3),
+          (mStart = 4),
+          (hEnd = 6),
+          (mEnd = 4),
+          (latLocation = 1222),
+          (longLocation = 555)
+        )
+      )
+        .to.emit(ct, "AddEvent")
+        .withArgs(acc, 1);
       // console.log("new EventId:", eventId);
       // let event = await ct.getEvent(eventId);
       // assert.equal(await ct.getEvent(eventId), "🛠 Programming hi amir");
 
-      // describe("Shambit subtest1", (accounts) => {
+      // describe("Shambit subtest1", (accounts) => {  q
       //   it("Should return the new greeting once it's changed", async function () {
       //     assert.equal(await greeter.purpose(), "Hola, mundo!1");
       //   });
