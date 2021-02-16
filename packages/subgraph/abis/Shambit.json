@@ -45,44 +45,123 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "startDate",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "endDate",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "hStart",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "mStart",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "hEnd",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "mEnd",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "latLocation",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "longLocation",
-        "type": "uint256"
+        "components": [
+          {
+            "internalType": "string",
+            "name": "label",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "startDate",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "endDate",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "hStart",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "mStart",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "hEnd",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "mEnd",
+            "type": "uint256"
+          },
+          {
+            "internalType": "enum Shambit.AccessibilityType",
+            "name": "accessibilityType",
+            "type": "uint8"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "lat",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "long",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct Shambit.Coordinate",
+            "name": "location",
+            "type": "tuple"
+          },
+          {
+            "internalType": "uint256",
+            "name": "viewRange",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "capacity",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256[3]",
+            "name": "targetsReward",
+            "type": "uint256[3]"
+          },
+          {
+            "internalType": "uint256[3]",
+            "name": "sharePowerReward",
+            "type": "uint256[3]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "participantsId",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "participantsSize",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "verified",
+            "type": "bool"
+          },
+          {
+            "internalType": "string",
+            "name": "IpfsCID",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "tokenName",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenDeposit",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Shambit.Event",
+        "name": "e",
+        "type": "tuple"
       }
     ],
     "name": "addEvent",

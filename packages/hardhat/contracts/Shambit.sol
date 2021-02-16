@@ -1,4 +1,5 @@
-pragma solidity >=0.6.0 <0.7.0;
+pragma solidity 0.7.1;
+pragma experimental ABIEncoderV2;
 //SPDX-License-Identifier: MIT
 
 import "hardhat/console.sol";
@@ -24,6 +25,7 @@ Events
 Structs
 */
     struct Event {
+        string label;
         uint256 id;
         uint256 startDate;
         uint256 endDate;
@@ -31,15 +33,16 @@ Structs
         uint256 mStart;
         uint256 hEnd;
         uint256 mEnd;
+        AccessibilityType accessibilityType;
         Coordinate location;
         uint256 viewRange;
         uint256 capacity;
         uint256[3] targetsReward;
         uint256[3] sharePowerReward;
-        mapping(address => Participant) participants;
+        //    mapping(address => Participant) participants;
         uint256[] participantsId;
         uint256 participantsSize;
-        //customTarget
+        // customTarget cTarget;
         bool verified;
         string IpfsCID;
         string tokenName;
@@ -57,40 +60,43 @@ Structs
         bool verified;
     }
 
-    string public purpose = "🛠 Programming hi amir";
+    string public purpose = " Programming hi amirrrrrrr";
 
     constructor() public {
-        uint256 ttt = now;
+        uint256 ttt = block.timestamp;
         console.log("now:", ttt);
 
         // what should we do on deploy?
-    }
+    } // @notice Explain to an end user what this does
+
+    /*
+Enums
+*/
+    enum AccessibilityType {Public, Private}
 
     /*
 Add funcitons 
 */
+    struct UintPair {
+        uint256 id;
+        uint256 startDate;
+        string ad;
+        AccessibilityType accessibilityType;
+        uint256[3] targetsReward;
+        Coordinate location;
+    }
 
-    function addEvent(
-        uint256 startDate,
-        uint256 endDate,
-        uint256 hStart,
-        uint256 mStart,
-        uint256 hEnd,
-        uint256 mEnd,
-        uint256 latLocation,
-        uint256 longLocation
-    ) public returns (uint256) {
-        Event memory ev;
-        ev.id = increment();
-        ev.startDate = startDate;
-        ev.endDate = endDate;
-        ev.hStart = hStart;
-        ev.mStart = mStart;
-        ev.location.lat = latLocation;
-        ev.location.long = longLocation;
-        //console.log("Start Date: ",ev.location.long);
-        events[ev.id] = ev;
-        emit AddEvent(msg.sender, ev.id);
+    function addEvent(Event memory e) public returns (uint256) {
+        events[e.id] = e;
+        assert(e.id==0);
+        assert(e.verified==false);
+        assert(e.participantsSize==0);
+        assert(e.participantsId.length==0);
+        e.id = increment();
+        e.participantsSize=0;
+        emit AddEvent(msg.sender, e.id);
+         return e.id;
+        //    console.log("ev:",ev);
     }
 
     function setPurpose(string memory newPurpose) public {
@@ -98,6 +104,11 @@ Add funcitons
         console.log(msg.sender, "set purpose to", purpose);
         emit SetPurpose(msg.sender, purpose);
     }
+
+    /*
+Getter functions
+/*
+
 
     /*
 Utiles

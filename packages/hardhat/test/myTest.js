@@ -59,34 +59,30 @@ describe("Shambit Tests", function() {
   describe("Events test adding", (accounts) => {
     it("Should added new public  event without custom target  when gets correct inputs", async function() {
       let event = {
-        lable: "global walking event ",
-        startDate: "first of jun 2021",
-        endData: "last of june 2021",
-        startTime: 00,
-        endTIme: 12,
-        accessibilityType: "public",
-        location: "Torento",
+        label: "global",
+        id: 0,
+        startDate: 1,
+        endDate: 2,
+        hStart: 3,
+        mStart: 12,
+        hEnd: 3,
+        mEnd: 4,
+        accessibilityType: 1,
+        location: { lat: 343, long: 343 },
         viewRange: 10,
         capacity: 200,
-        targetReward: [10, 20, 30],
+        targetsReward: [10, 20, 30],
         sharePowerReward: [5, 20, 16],
-        IpfCID: "QmdXUKh8LU75HTVhqjAMyBqQEZ9Cr7cHjBrVzjF3ixeNqZ",
+        participantsId: [],
+        participantsSize: 0,
+        veified: false,
+        IpfsCID: "QmdXUKh8LU75HTVhqjAMyBqQEZ9Cr7cHjBrVzjF3ixeNqZ",
         tokenName: "SBT",
+        tokenDeposit: 0,
       };
       const accounts = await ethers.getSigners();
       let acc = accounts[0].address;
-      await expect(
-        ct.addEvent(
-          (startDate = Date.now()),
-          (endDate = Date.now()),
-          (hStart = 3),
-          (mStart = 4),
-          (hEnd = 6),
-          (mEnd = 4),
-          (latLocation = 1222),
-          (longLocation = 555)
-        )
-      )
+      await expect(ct.addEvent(event))
         .to.emit(ct, "AddEvent")
         .withArgs(acc, 1);
       // console.log("new EventId:", eventId);
