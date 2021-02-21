@@ -88,14 +88,14 @@ Add funcitons
 
     function addEvent(Event memory e) public returns (uint256) {
         events[e.id] = e;
-        assert(e.id==0);
-        assert(e.verified==false);
-        assert(e.participantsSize==0);
-        assert(e.participantsId.length==0);
+        assert(e.id == 0);
+        assert(e.verified == false);
+        assert(e.participantsSize == 0);
+        assert(e.participantsId.length == 0);
         e.id = increment();
-        e.participantsSize=0;
+        e.participantsSize = 0;
         emit AddEvent(msg.sender, e.id);
-         return e.id;
+        return e.id;
         //    console.log("ev:",ev);
     }
 
@@ -107,8 +107,60 @@ Add funcitons
 
     /*
 Getter functions
-/*
-
+*/
+    function getEvent(uint256 id)
+        public
+        view
+        returns (
+            string memory label,
+            uint256 eventId,
+            uint256 startDate,
+            uint256 endDate,
+            uint256 hStart,
+            uint256 mStart,
+            uint256 hEnd,
+            uint256 mEnd
+            // bool accessibilityType,
+            // uint256 locationLat,
+            // uint256 locationLong,
+            // uint256 viewRange
+            // uint256 capacity,
+            // uint256[3] memory targetsReward,
+            // uint256[3] memory sharePowerReward,
+            // //    mapping(address => Participant) participants;
+            // uint256[] memory participantsId,
+            // uint256 participantsSize,
+            // // customTarget cTarget;
+            // bool verified,
+            // string memory IpfsCID,
+            // string memory tokenName,
+            // uint256 tokenDeposit
+        )
+    {
+        return (
+            events[id].label,
+            id,
+            events[id].startDate,
+            events[id].endDate,
+            events[id].hStart,
+            events[id].mStart,
+            events[id].hEnd,
+            events[id].mEnd
+            // events[id].accessibilityType,
+            // events[id].location.lat,
+            // events[id].location.long,
+            // events[id].viewRange
+            // events[id].capacity,
+            // events[id].targetsReward,
+            // events[id].sharePowerReward,
+            // events[id].participantsId,
+            // events[id].participantsSize,
+            // events[id].verified,
+            // events[id].IpfsCID,
+            // events[id].tokenName,
+            // events[id].tokenDeposit
+        );
+    }
 
     /*
 Utiles
