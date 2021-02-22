@@ -1,7 +1,7 @@
 const { ethers } = require("hardhat");
 const { use, expect } = require("chai");
 const { solidity } = require("ethereum-waffle");
-
+const abiDecoder = require("abi-decoder");
 use(solidity);
 
 // describe("My Dapp", function () {
@@ -58,6 +58,25 @@ describe("Shambit Tests", function() {
 
   describe("Events test adding", (accounts) => {
     it("Should added new public  event without custom target  when gets correct inputs", async function() {
+      const accounts = await ethers.getSigners();
+      let acc = accounts[0].address;
+      let tNow =2213;
+      await expect(
+        ct.addPublicEvent( 
+          startDate= tNow,
+          endDate= tNow  ,
+          location= "35.7016082,51.3366829",
+          viewRange= 20,
+          capacity= 300,
+          targetsReward= [12, 34, 23],
+          sharePowerReward= [23, 43, 21],
+          IpfsCID= "QmdXUKh8LU75HTVhqjAMyBqQEZ9Cr7cHjBrVzjF3ixeNqZ",
+          tokenName= "SBT",
+        )
+      )
+        .to.emit(ct, "AddPublicEvent")
+        .withArgs(acc, 1 );
+        console.log("Get first event",parseInt((await ct.getEvent(1)).capacity._hex ) )
       let event = {
         label: "global",
         id: 0,
@@ -80,11 +99,14 @@ describe("Shambit Tests", function() {
         tokenName: "SBT",
         tokenDeposit: 0,
       };
-      const accounts = await ethers.getSigners();
-      let acc = accounts[0].address;
-      await expect(ct.addEvent(event))
-        .to.emit(ct, "AddEvent")
-        .withArgs(acc, 1);
+
+      // const accounts = await ethers.getSigners();
+      // let acc = accounts[0].address;
+      // await expect(ct.addEvent(event))
+      //   .to.emit(ct, "AddEvent")
+      //   .withArgs(acc,1);
+
+      //   console.log(await  ct.getEvent(1));
       // console.log("new EventId:", eventId);
       // let event = await ct.getEvent(eventId);
       // assert.equal(await ct.getEvent(eventId), "🛠 Programming hi amir");

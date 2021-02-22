@@ -72,5 +72,7 @@
       "path": "./node_modules/cz-emoji"
     }
   },
-  "dependencies": {}
+  "dependencies": {
+    "abi-decoder": "^2.4.0"
+  }
 }

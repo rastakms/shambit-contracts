@@ -1,5 +1,5 @@
-pragma solidity 0.7.1;
-pragma experimental ABIEncoderV2;
+pragma solidity >=0.6.0 <0.7.0;
+// pragma experimental ABIEncoderV2;
 //SPDX-License-Identifier: MIT
 
 import "hardhat/console.sol";
@@ -19,22 +19,21 @@ Variable
     /*
 Events
 */
+    event AddPublicEvent(address sender, uint256 eventId);
     event SetPurpose(address sender, string purpose);
     event AddEvent(address sender, uint256 eventId);
+    event addParticipant(uint256, address);
     /*
 Structs
 */
     struct Event {
-        string label;
         uint256 id;
+        // string label
+        address payable creator;
         uint256 startDate;
         uint256 endDate;
-        uint256 hStart;
-        uint256 mStart;
-        uint256 hEnd;
-        uint256 mEnd;
-        AccessibilityType accessibilityType;
-        Coordinate location;
+        bool isPublic;
+        string location;
         uint256 viewRange;
         uint256 capacity;
         uint256[3] targetsReward;
@@ -63,47 +62,102 @@ Structs
     string public purpose = " Programming hi amirrrrrrr";
 
     constructor() public {
-        uint256 ttt = block.timestamp;
-        console.log("now:", ttt);
-
+        // uint256 ttt = block.timestamp;
+        // console.log("now:", ttt);
         // what should we do on deploy?
     } // @notice Explain to an end user what this does
 
     /*
 Enums
 */
-    enum AccessibilityType {Public, Private}
 
     /*
 Add funcitons 
 */
-    struct UintPair {
-        uint256 id;
-        uint256 startDate;
-        string ad;
-        AccessibilityType accessibilityType;
-        uint256[3] targetsReward;
-        Coordinate location;
-    }
+    // struct UintPair {
+    //     uint256 id;
+    //     uint256 startDate;
+    //     string ad;
+    //     AccessibilityType accessibilityType;
+    //     uint256[3] targetsReward;
+    //     Coordinate location;
+    // }
 
-    function addEvent(Event memory e) public returns (uint256) {
+    // function addEvent(Event memory e) public returns (uint256) {
+    //     events[e.id] = e;
+    //     assert(e.id == 0);
+    //     assert(e.verified == false);
+    //     assert(e.participantsSize == 0);
+    //     assert(e.participantsId.length == 0);
+    //     e.id = increment();
+    //     e.participantsSize = 0;
+    //     emit AddEvent(msg.sender, e.id);
+    //     return e.id;
+    //     //    console.log("ev:",ev);
+    // }
+
+    function addPublicEvent(
+        uint256 startDate,
+        uint256 endDate,
+        string memory location,
+        uint256 viewRange,
+        uint256 capacity,
+        uint256[3] memory targetsReward,
+        uint256[3] memory sharePowerReward,
+        string memory IpfsCID,
+        string memory tokenName
+    ) public returns (uint256 id) {
+        Event memory e;
+        e.id = genId();
+        e.creator = msg.sender;
+        e.startDate = startDate;
+        e.endDate = endDate;
+        e.location = location;
+        e.viewRange = viewRange;
+        e.capacity = capacity;
+        e.targetsReward = targetsReward;
+        e.sharePowerReward = sharePowerReward;
+        e.IpfsCID = IpfsCID;
+        e.tokenName = tokenName;
+        //TODO computing token deposit
         events[e.id] = e;
-        assert(e.id == 0);
-        assert(e.verified == false);
-        assert(e.participantsSize == 0);
-        assert(e.participantsId.length == 0);
-        e.id = increment();
-        e.participantsSize = 0;
-        emit AddEvent(msg.sender, e.id);
+        emit AddPublicEvent(msg.sender,e.id);
         return e.id;
-        //    console.log("ev:",ev);
     }
 
-    function setPurpose(string memory newPurpose) public {
-        purpose = newPurpose;
-        console.log(msg.sender, "set purpose to", purpose);
-        emit SetPurpose(msg.sender, purpose);
-    }
+    // function test(
+    //     uint256[]  a44,
+    //     uint256 a33,
+    //     uint256 a22,
+    //     uint256 a11,
+    //     uint256 a6,
+    //     uint256 a5,
+    //     uint256 a4,
+    //     uint256 a3,
+    //     uint256 a2,
+    //     string[]  a1,
+    //     uint256 aa,
+    //     uint256 asv //  uint ad
+    // ) public // uint af
+
+    // {
+    //     uint256 b = 12;
+    // }
+
+    // function addParticipant(uint256 eventId, address participantAddress) public{
+
+    //     events[id].participants.push(participantAddress);
+    //     emit AddParticipant( eventId, participantAddress);
+
+    // }
+    // function setFinalActivityStatus public (uint256 eventId, uint256[] memory targetProgresses ){
+    //     uint test =343;
+    // }
+    //     function setPurpose(string memory newPurpose) public {
+    //         purpose = newPurpose;
+    //         console.log(msg.sender, "set purpose to", purpose);
+    //         emit SetPurpose(msg.sender, purpose);
+    //     }
 
     /*
 Getter functions
@@ -112,60 +166,63 @@ Getter functions
         public
         view
         returns (
-            string memory label,
-            uint256 eventId,
+            // string memory label,
+            // uint256 eventId,
             uint256 startDate,
             uint256 endDate,
-            uint256 hStart,
-            uint256 mStart,
-            uint256 hEnd,
-            uint256 mEnd
-            // bool accessibilityType,
-            // uint256 locationLat,
-            // uint256 locationLong,
-            // uint256 viewRange
-            // uint256 capacity,
-            // uint256[3] memory targetsReward,
-            // uint256[3] memory sharePowerReward,
-            // //    mapping(address => Participant) participants;
-            // uint256[] memory participantsId,
-            // uint256 participantsSize,
-            // // customTarget cTarget;
-            // bool verified,
-            // string memory IpfsCID,
-            // string memory tokenName,
-            // uint256 tokenDeposit
+            bool isPublic,
+            string memory location,
+            uint256 viewRange,
+            uint256 capacity,
+            string memory IpfsCID
         )
     {
         return (
-            events[id].label,
-            id,
             events[id].startDate,
             events[id].endDate,
-            events[id].hStart,
-            events[id].mStart,
-            events[id].hEnd,
-            events[id].mEnd
-            // events[id].accessibilityType,
-            // events[id].location.lat,
-            // events[id].location.long,
-            // events[id].viewRange
-            // events[id].capacity,
-            // events[id].targetsReward,
-            // events[id].sharePowerReward,
-            // events[id].participantsId,
+            events[id].isPublic,
+            events[id].location,
+            events[id].viewRange,
+            events[id].capacity,
+            events[id].IpfsCID
+            //  events[id].tokenName,
+            // events[id].targetsReward
+            //   events[id].sharePowerReward
+
             // events[id].participantsSize,
-            // events[id].verified,
+            // events[id].verified
             // events[id].IpfsCID,
-            // events[id].tokenName,
-            // events[id].tokenDeposit
+            // events[id].tokenName
+        );
+    }
+
+    function getEventDetail(uint256 id)
+        public
+        view
+        returns (
+            // string memory label,
+            // uint256 eventId,
+
+            string memory tokenName,
+            uint256[3]  memory targetsReward,
+            uint256[3] memory  sharePowerReward,
+            uint256 participantsSize,
+            bool verified
+        )
+    {
+        return (
+            events[id].tokenName,
+            events[id].targetsReward,
+            events[id].sharePowerReward,
+            events[id].participantsSize,
+            events[id].verified
         );
     }
 
     /*
 Utiles
     */
-    function increment() public returns (uint256) {
+    function genId() private returns (uint256) {
         idSeed = idSeed.add(1);
         return idSeed;
     }

@@ -34,6 +34,25 @@
       },
       {
         "indexed": false,
+        "internalType": "uint256",
+        "name": "eventId",
+        "type": "uint256"
+      }
+    ],
+    "name": "AddPublicEvent",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "indexed": false,
         "internalType": "string",
         "name": "purpose",
         "type": "string"
@@ -43,132 +62,77 @@
     "type": "event"
   },
   {
+    "anonymous": false,
     "inputs": [
       {
-        "components": [
-          {
-            "internalType": "string",
-            "name": "label",
-            "type": "string"
-          },
-          {
-            "internalType": "uint256",
-            "name": "id",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "startDate",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "endDate",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "hStart",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "mStart",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "hEnd",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "mEnd",
-            "type": "uint256"
-          },
-          {
-            "internalType": "enum Shambit.AccessibilityType",
-            "name": "accessibilityType",
-            "type": "uint8"
-          },
-          {
-            "components": [
-              {
-                "internalType": "uint256",
-                "name": "lat",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "long",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct Shambit.Coordinate",
-            "name": "location",
-            "type": "tuple"
-          },
-          {
-            "internalType": "uint256",
-            "name": "viewRange",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "capacity",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256[3]",
-            "name": "targetsReward",
-            "type": "uint256[3]"
-          },
-          {
-            "internalType": "uint256[3]",
-            "name": "sharePowerReward",
-            "type": "uint256[3]"
-          },
-          {
-            "internalType": "uint256[]",
-            "name": "participantsId",
-            "type": "uint256[]"
-          },
-          {
-            "internalType": "uint256",
-            "name": "participantsSize",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bool",
-            "name": "verified",
-            "type": "bool"
-          },
-          {
-            "internalType": "string",
-            "name": "IpfsCID",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "tokenName",
-            "type": "string"
-          },
-          {
-            "internalType": "uint256",
-            "name": "tokenDeposit",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct Shambit.Event",
-        "name": "e",
-        "type": "tuple"
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
-    "name": "addEvent",
+    "name": "addParticipant",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "startDate",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "endDate",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "location",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "viewRange",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "capacity",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256[3]",
+        "name": "targetsReward",
+        "type": "uint256[3]"
+      },
+      {
+        "internalType": "uint256[3]",
+        "name": "sharePowerReward",
+        "type": "uint256[3]"
+      },
+      {
+        "internalType": "string",
+        "name": "IpfsCID",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "tokenName",
+        "type": "string"
+      }
+    ],
+    "name": "addPublicEvent",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "id",
         "type": "uint256"
       }
     ],
@@ -186,16 +150,6 @@
     "name": "getEvent",
     "outputs": [
       {
-        "internalType": "string",
-        "name": "label",
-        "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "eventId",
-        "type": "uint256"
-      },
-      {
         "internalType": "uint256",
         "name": "startDate",
         "type": "uint256"
@@ -206,30 +160,71 @@
         "type": "uint256"
       },
       {
+        "internalType": "bool",
+        "name": "isPublic",
+        "type": "bool"
+      },
+      {
+        "internalType": "string",
+        "name": "location",
+        "type": "string"
+      },
+      {
         "internalType": "uint256",
-        "name": "hStart",
+        "name": "viewRange",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "mStart",
+        "name": "capacity",
         "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "IpfsCID",
+        "type": "string"
       }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "increment",
-    "outputs": [
+    "inputs": [
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "id",
         "type": "uint256"
       }
     ],
-    "stateMutability": "nonpayable",
+    "name": "getEventDetail",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "tokenName",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256[3]",
+        "name": "targetsReward",
+        "type": "uint256[3]"
+      },
+      {
+        "internalType": "uint256[3]",
+        "name": "sharePowerReward",
+        "type": "uint256[3]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "participantsSize",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "verified",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -243,19 +238,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "newPurpose",
-        "type": "string"
-      }
-    ],
-    "name": "setPurpose",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]
