@@ -25,7 +25,7 @@ Events
     event AddParticipant(uint256, address);
     event SetFinalActivityStatus(address sender, uint256 eventId);
     event CloseEvent(uint256 eventId);
-    event EditEvent(uint eventID);
+    event EditEvent(uint256 eventID);
     /*
 Structs
 */
@@ -241,6 +241,21 @@ Getter functions
             events[id].verified,
             events[id].close
         );
+    }
+
+    function getParticipantStatus(uint256 eventId, address participantAddress)
+        public
+        view
+        returns (
+            address refAddress,
+            bool complete,
+            uint256[3] memory targetProgress,
+            bool verified
+        )
+    {
+        Participant memory p = events[eventId].participants[participantAddress];
+
+        return (p.refAddress, p.complete, p.targetProgress, p.verified);
     }
 
     function editEvent(uint256 eventId, string memory IpfsCID) public {
