@@ -24,7 +24,8 @@ Events
     event AddEvent(address sender, uint256 eventId);
     event AddParticipant(uint256, address);
     event SetFinalActivityStatus(address sender, uint256 eventId);
-    event CloseEvent(uint eventId);
+    event CloseEvent(uint256 eventId);
+    event EditEvent(uint eventID);
     /*
 Structs
 */
@@ -169,9 +170,8 @@ Add funcitons
         emit SetFinalActivityStatus(msg.sender, eventId);
     }
 
-    function closeEvent(uint eventId) public{
-
-        events[eventId].close=true;
+    function closeEvent(uint256 eventId) public {
+        events[eventId].close = true;
         emit CloseEvent(eventId);
     }
 
@@ -241,6 +241,11 @@ Getter functions
             events[id].verified,
             events[id].close
         );
+    }
+
+    function editEvent(uint256 eventId, string memory IpfsCID) public {
+        events[eventId].IpfsCID = IpfsCID;
+        emit EditEvent(eventId);
     }
 
     /*
