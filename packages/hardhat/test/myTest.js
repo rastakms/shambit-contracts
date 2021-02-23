@@ -104,6 +104,14 @@ describe("Shambit Tests", function() {
         .withArgs(1);
       expect((await ct.getEventDetail(1)).close).to.be.equal(true);
     });
+
+
+    it("Should edit first event, just IpfsCID must e change",async function  (){
+      expect(ct.editEvent(1,"QmaGZnbm9UE5VBWimUEsecLyHB7NzesmT6MmmDzCozKjj7"))
+      .to.emit(ct, "editEvent")
+      .withArgs(1);
+
+    })
     // let event = {
     //   label: "global",
     //   id: 0,
