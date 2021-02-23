@@ -60,63 +60,67 @@ describe("Shambit Tests", function() {
     it("Should added new public  event without custom target  when gets correct inputs", async function() {
       const accounts = await ethers.getSigners();
       let acc = accounts[0].address;
-      let tNow =2213;
+      let tNow = 2213;
       await expect(
-        ct.addPublicEvent( 
-          startDate= tNow,
-          endDate= tNow  ,
-          location= "35.7016082,51.3366829",
-          viewRange= 20,
-          capacity= 300,
-          targetsReward= [12, 34, 23],
-          sharePowerReward= [23, 43, 21],
-          IpfsCID= "QmdXUKh8LU75HTVhqjAMyBqQEZ9Cr7cHjBrVzjF3ixeNqZ",
-          tokenName= "SBT",
+        ct.addPublicEvent(
+          (startDate = tNow),
+          (endDate = tNow),
+          (location = "35.7016082,51.3366829"),
+          (viewRange = 20),
+          (capacity = 300),
+          (targetsReward = [12, 34, 23]),
+          (sharePowerReward = [23, 43, 21]),
+          (IpfsCID = "QmdXUKh8LU75HTVhqjAMyBqQEZ9Cr7cHjBrVzjF3ixeNqZ"),
+          (tokenName = "SBT")
         )
       )
         .to.emit(ct, "AddPublicEvent")
-        .withArgs(acc, 1 );
-        console.log("Get first event",parseInt((await ct.getEvent(1)).capacity._hex ) )
-      let event = {
-        label: "global",
-        id: 0,
-        startDate: 1,
-        endDate: 2,
-        hStart: 3,
-        mStart: 12,
-        hEnd: 3,
-        mEnd: 4,
-        accessibilityType: 1,
-        location: { lat: 343, long: 343 },
-        viewRange: 10,
-        capacity: 200,
-        targetsReward: [10, 20, 30],
-        sharePowerReward: [5, 20, 16],
-        participantsId: [],
-        participantsSize: 0,
-        veified: false,
-        IpfsCID: "QmdXUKh8LU75HTVhqjAMyBqQEZ9Cr7cHjBrVzjF3ixeNqZ",
-        tokenName: "SBT",
-        tokenDeposit: 0,
-      };
-
-      // const accounts = await ethers.getSigners();
-      // let acc = accounts[0].address;
-      // await expect(ct.addEvent(event))
-      //   .to.emit(ct, "AddEvent")
-      //   .withArgs(acc,1);
-
-      //   console.log(await  ct.getEvent(1));
-      // console.log("new EventId:", eventId);
-      // let event = await ct.getEvent(eventId);
-      // assert.equal(await ct.getEvent(eventId), "🛠 Programming hi amir");
-
-      // describe("Shambit subtest1", (accounts) => {  q
-      //   it("Should return the new greeting once it's changed", async function () {
-      //     assert.equal(await greeter.purpose(), "Hola, mundo!1");
-      //   });
-      // });
+        .withArgs(acc, 1);
     });
+    it("Should get public first event", async function() {
+      expect((await ct.getEvent(1)).capacity).to.be.equal(300);
+      //  parseInt((await ct.getEvent(1)).capacity._hex)
+    });
+    // let event = {
+    //   label: "global",
+    //   id: 0,
+    //   startDate: 1,
+    //   endDate: 2,
+    //   hStart: 3,
+    //   mStart: 12,
+    //   hEnd: 3,
+    //   mEnd: 4,
+    //   accessibilityType: 1,
+    //   location: { lat: 343, long: 343 },
+    //   viewRange: 10,
+    //   capacity: 200,
+    //   targetsReward: [10, 20, 30],
+    //   sharePowerReward: [5, 20, 16],
+    //   participantsId: [],
+    //   participantsSize: 0,
+    //   veified: false,
+    //   IpfsCID: "QmdXUKh8LU75HTVhqjAMyBqQEZ9Cr7cHjBrVzjF3ixeNqZ",
+    //   tokenName: "SBT",
+    //   tokenDeposit: 0,
+    // };
+
+    // const accounts = await ethers.getSigners();
+    // let acc = accounts[0].address;
+    // await expect(ct.addEvent(event))
+    //   .to.emit(ct, "AddEvent")
+    //   .withArgs(acc,1);
+
+    //   console.log(await  ct.getEvent(1));
+    // console.log("new EventId:", eventId);
+    // let event = await ct.getEvent(eventId);
+    // assert.equal(await ct.getEvent(eventId), "🛠 Programming hi amir");
+
+    // describe("Shambit subtest1", (accounts) => {  q
+    //   it("Should return the new greeting once it's changed", async function () {
+    //     assert.equal(await greeter.purpose(), "Hola, mundo!1");
+    //   });
+    // });
+
     // it("Should return the new greeting once it's changed", async function () {
     //   //const greeter = await YourContract.new();
     //   assert.equal(await greeter.purpose(), "Hola, mundo!");
