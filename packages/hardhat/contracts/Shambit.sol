@@ -22,7 +22,8 @@ Events
     event AddPublicEvent(address sender, uint256 eventId);
     event SetPurpose(address sender, string purpose);
     event AddEvent(address sender, uint256 eventId);
-    event addParticipant(uint256, address);
+    event AddParticipant(uint256, address);
+    event SetFinalActivityStatus(address sender, uint256 eventId);
     /*
 Structs
 */
@@ -38,7 +39,7 @@ Structs
         uint256 capacity;
         uint256[3] targetsReward;
         uint256[3] sharePowerReward;
-        //    mapping(address => Participant) participants;
+        mapping(address => Participant) participants;
         uint256[] participantsId;
         uint256 participantsSize;
         // customTarget cTarget;
@@ -121,7 +122,7 @@ Add funcitons
         e.tokenName = tokenName;
         //TODO computing token deposit
         events[e.id] = e;
-        emit AddPublicEvent(msg.sender,e.id);
+        emit AddPublicEvent(msg.sender, e.id);
         return e.id;
     }
 
@@ -144,20 +145,32 @@ Add funcitons
     //     uint256 b = 12;
     // }
 
-    // function addParticipant(uint256 eventId, address participantAddress) public{
+    function addParticipant(uint256 eventId, address payable refAddress)
+        public
+    {
+        Participant memory pr;
+        pr.id = genId();
+        pr.refAddress = refAddress;
+        events[eventId].participants[msg.sender] = pr;
+        events[eventId].participantsSize.add(1);
+        events[eventId].participantsId.push(pr.id);
+        emit AddParticipant(eventId, msg.sender);
+    }
 
-    //     events[id].participants.push(participantAddress);
-    //     emit AddParticipant( eventId, participantAddress);
+    function setFinalActivityStatus(
+        uint256 eventId,
+        uint256[3] memory targetProgress
+    ) public {
+        events[eventId].participants[msg.sender]
+            .targetProgress = targetProgress;
+        emit SetFinalActivityStatus(msg.sender, eventId);
+    }
 
+    // function setPurpose(string memory newPurpose) public {
+    //     purpose = newPurpose;
+    //     console.log(msg.sender, "set purpose to", purpose);
+    //     emit SetPurpose(msg.sender, purpose);
     // }
-    // function setFinalActivityStatus public (uint256 eventId, uint256[] memory targetProgresses ){
-    //     uint test =343;
-    // }
-    //     function setPurpose(string memory newPurpose) public {
-    //         purpose = newPurpose;
-    //         console.log(msg.sender, "set purpose to", purpose);
-    //         emit SetPurpose(msg.sender, purpose);
-    //     }
 
     /*
 Getter functions
@@ -204,8 +217,8 @@ Getter functions
             // uint256 eventId,
 
             string memory tokenName,
-            uint256[3]  memory targetsReward,
-            uint256[3] memory  sharePowerReward,
+            uint256[3] memory targetsReward,
+            uint256[3] memory sharePowerReward,
             uint256 participantsSize,
             bool verified
         )

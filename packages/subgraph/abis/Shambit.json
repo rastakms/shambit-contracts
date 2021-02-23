@@ -28,6 +28,25 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "AddParticipant",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "address",
         "name": "sender",
         "type": "address"
@@ -53,6 +72,25 @@
       },
       {
         "indexed": false,
+        "internalType": "uint256",
+        "name": "eventId",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetFinalActivityStatus",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "indexed": false,
         "internalType": "string",
         "name": "purpose",
         "type": "string"
@@ -62,23 +100,22 @@
     "type": "event"
   },
   {
-    "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
         "internalType": "uint256",
-        "name": "",
+        "name": "eventId",
         "type": "uint256"
       },
       {
-        "indexed": false,
-        "internalType": "address",
-        "name": "",
+        "internalType": "address payable",
+        "name": "refAddress",
         "type": "address"
       }
     ],
     "name": "addParticipant",
-    "type": "event"
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
     "inputs": [
@@ -238,6 +275,24 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "eventId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256[3]",
+        "name": "targetProgress",
+        "type": "uint256[3]"
+      }
+    ],
+    "name": "setFinalActivityStatus",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]
