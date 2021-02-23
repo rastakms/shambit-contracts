@@ -24,6 +24,7 @@ Events
     event AddEvent(address sender, uint256 eventId);
     event AddParticipant(uint256, address);
     event SetFinalActivityStatus(address sender, uint256 eventId);
+    event CloseEvent(uint eventId);
     /*
 Structs
 */
@@ -47,6 +48,7 @@ Structs
         string IpfsCID;
         string tokenName;
         uint256 tokenDeposit;
+        bool close;
     }
     struct Coordinate {
         uint256 lat;
@@ -163,7 +165,14 @@ Add funcitons
     ) public {
         events[eventId].participants[msg.sender]
             .targetProgress = targetProgress;
+        events[eventId].participants[msg.sender].complete = true;
         emit SetFinalActivityStatus(msg.sender, eventId);
+    }
+
+    function closeEvent(uint eventId) public{
+
+        events[eventId].close=true;
+        emit CloseEvent(eventId);
     }
 
     // function setPurpose(string memory newPurpose) public {
@@ -220,7 +229,8 @@ Getter functions
             uint256[3] memory targetsReward,
             uint256[3] memory sharePowerReward,
             uint256 participantsSize,
-            bool verified
+            bool verified,
+            bool close
         )
     {
         return (
@@ -228,7 +238,8 @@ Getter functions
             events[id].targetsReward,
             events[id].sharePowerReward,
             events[id].participantsSize,
-            events[id].verified
+            events[id].verified,
+            events[id].close
         );
     }
 

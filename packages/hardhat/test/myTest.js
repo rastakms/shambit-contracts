@@ -40,7 +40,7 @@ describe("Shambit Tests", function() {
   before(async function() {
     const ContractFactory = await ethers.getContractFactory("Shambit");
     ct = await ContractFactory.deploy();
-    
+
     // ct = await ShambitContract.new();
     // runs once before the first test in this block
   });
@@ -94,7 +94,15 @@ describe("Shambit Tests", function() {
       let acc = accounts[0].address;
       expect(ct.setFinalActivityStatus(1, [45, 45, 45]))
         .to.emit(ct, "SetFinalActivityStatus")
-        .withArgs(acc,1);
+        .withArgs(acc, 1);
+    });
+    it("Should close first event and transfer all reward to participant and send back extra assets to owner of event", async function() {
+      expect((await ct.getEventDetail(1)).close).to.be.equal(false);
+
+      expect(ct.closeEvent(1))
+        .to.emit(ct, "CloseEvent")
+        .withArgs(1);
+      expect((await ct.getEventDetail(1)).close).to.be.equal(true);
     });
     // let event = {
     //   label: "global",

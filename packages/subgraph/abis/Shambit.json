@@ -66,6 +66,19 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "uint256",
+        "name": "eventId",
+        "type": "uint256"
+      }
+    ],
+    "name": "CloseEvent",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "address",
         "name": "sender",
         "type": "address"
@@ -180,6 +193,19 @@
     "inputs": [
       {
         "internalType": "uint256",
+        "name": "eventId",
+        "type": "uint256"
+      }
+    ],
+    "name": "closeEvent",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
         "name": "id",
         "type": "uint256"
       }
@@ -258,6 +284,11 @@
       {
         "internalType": "bool",
         "name": "verified",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "close",
         "type": "bool"
       }
     ],
