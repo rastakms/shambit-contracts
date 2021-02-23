@@ -81,6 +81,18 @@ describe("Shambit Tests", function() {
       expect((await ct.getEvent(1)).capacity).to.be.equal(300);
       //  parseInt((await ct.getEvent(1)).capacity._hex)
     });
+    it("Should add participant with reffaddres ", async function() {
+      const accounts = await ethers.getSigners();
+      let acc = accounts[0].address;
+      expect(ct.addParticipant(1, acc))
+        .to.emit(ct, "AddParticipant")
+        .withArgs(1, acc);
+      });
+      it("Should can set final activity of participant",async function(){
+        
+        await ct.setFinalActivityStatus(1,[45,45,45])
+
+      })
     // let event = {
     //   label: "global",
     //   id: 0,
