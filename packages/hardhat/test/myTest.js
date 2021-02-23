@@ -57,7 +57,7 @@ describe("Shambit Tests", function() {
     // runs after each test in this block
   });
 
-  describe("Events test adding", (accounts) => {
+  describe("Event test ", (accounts) => {
     it("Should added new public  event without custom target  when gets correct inputs", async function() {
       const accounts = await ethers.getSigners();
       let acc = accounts[0].address;
@@ -105,13 +105,18 @@ describe("Shambit Tests", function() {
       expect((await ct.getEventDetail(1)).close).to.be.equal(true);
     });
 
-
-    it("Should edit first event, just IpfsCID must e change",async function  (){
-      expect(ct.editEvent(1,"QmaGZnbm9UE5VBWimUEsecLyHB7NzesmT6MmmDzCozKjj7"))
-      .to.emit(ct, "editEvent")
-      .withArgs(1);
-
-    })
+    it("Should edit first event, just IpfsCID must e change", async function() {
+      expect(ct.editEvent(1, "QmaGZnbm9UE5VBWimUEsecLyHB7NzesmT6MmmDzCozKjj7"))
+        .to.emit(ct, "EditEvent")
+        .withArgs(1);
+    });
+    it("Should get participant data for first event and specific participant address", async function() {
+      const accounts = await ethers.getSigners();
+      let acc = accounts[0].address;
+      expect((await ct.getParticipantStatus(1, acc)).refAddress).to.be.equal(
+        acc
+      );
+    });
     // let event = {
     //   label: "global",
     //   id: 0,
