@@ -40,6 +40,7 @@ describe("Shambit Tests", function() {
   before(async function() {
     const ContractFactory = await ethers.getContractFactory("Shambit");
     ct = await ContractFactory.deploy();
+    
     // ct = await ShambitContract.new();
     // runs once before the first test in this block
   });
@@ -87,12 +88,14 @@ describe("Shambit Tests", function() {
       expect(ct.addParticipant(1, acc))
         .to.emit(ct, "AddParticipant")
         .withArgs(1, acc);
-      });
-      it("Should can set final activity of participant",async function(){
-        
-        await ct.setFinalActivityStatus(1,[45,45,45])
-
-      })
+    });
+    it("Should can set final activity of participant", async function() {
+      const accounts = await ethers.getSigners();
+      let acc = accounts[0].address;
+      expect(ct.setFinalActivityStatus(1, [45, 45, 45]))
+        .to.emit(ct, "SetFinalActivityStatus")
+        .withArgs(acc,1);
+    });
     // let event = {
     //   label: "global",
     //   id: 0,
