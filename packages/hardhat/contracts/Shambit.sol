@@ -114,7 +114,7 @@ Add funcitons
         string memory IpfsCID,
         string memory tokenName
     ) public returns (uint256 id) {
-        Event memory e;
+        Event memory e; 
         e.id = genId();
         e.creator = msg.sender;
         e.startDate = startDate;
@@ -129,6 +129,7 @@ Add funcitons
         //TODO computing token deposit
         events[e.id] = e;
         emit AddPublicEvent(msg.sender, e.id);
+        require(SBT.transferFrom(msg.sender,address(this),100));
         return e.id;
     }
 

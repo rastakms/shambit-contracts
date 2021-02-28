@@ -39,8 +39,10 @@ describe("Shambit Tests", function() {
 
   before(async function() {
     const ContractFactory = await ethers.getContractFactory("Shambit");
-    const ShambitTokenContractFactory = await ethers.getContractFactory("ShambitToken");
-    SBTct= await ShambitTokenContractFactory.deploy(1000000)
+    const ShambitTokenContractFactory = await ethers.getContractFactory(
+      "ShambitToken"
+    );
+    SBTct = await ShambitTokenContractFactory.deploy(1000000);
     ct = await ContractFactory.deploy(SBTct.address);
     // ct = await ShambitContract.new();
     // runs once before the first test in this block
@@ -57,12 +59,31 @@ describe("Shambit Tests", function() {
   afterEach(function() {
     // runs after each test in this block
   });
+  describe("ShambitToken test", (accounts) => {
+    it("Should  first account send token to second account", async function() {
+      const accounts = await ethers.getSigners();
+      let acc1 = accounts[1];
+      SBTct.transfer(acc1.address, 100);
+      expect(await SBTct.balanceOf(acc1.address)).to.equal(100);
+    
+    });
+    it("Should second account  send token to third account", async function() {
+      const accounts = await ethers.getSigners();
+      let acc1 = accounts[1];
+      let acc2 = accounts[2];
+      await SBTct.connect(acc1).transfer(acc2.address,100);
+      expect(await SBTct.balanceOf(acc2.address)).to.equal(100);
+    });
+  });
 
   describe("Event test ", (accounts) => {
     it("Should added new public  event without custom target  when gets correct inputs", async function() {
       const accounts = await ethers.getSigners();
+
       let acc = accounts[0].address;
+      let acc1 = accounts[1].address;
       let tNow = 2213;
+      SBTct.approve(ct.address, 100);
       await expect(
         ct.addPublicEvent(
           (startDate = tNow),
