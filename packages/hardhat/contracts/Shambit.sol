@@ -45,6 +45,7 @@ Structs
         uint256[3] sharePowerReward;
         mapping(address => Participant) participants;
         uint256[] participantsId;
+        address[] participantsAddresses;
         uint256 participantsSize;
         // customTarget cTarget;
         bool verified;
@@ -68,7 +69,7 @@ Structs
     string public purpose = " Programming hi amirrrrrrr";
 
     constructor(address shambitTokenAddress) public {
-        SBT =  ShambitToken(shambitTokenAddress);
+        SBT = ShambitToken(shambitTokenAddress);
         // uint256 ttt = block.timestamp;
         // console.log("now:", ttt);
         // what should we do on deploy?
@@ -114,7 +115,7 @@ Add funcitons
         string memory IpfsCID,
         string memory tokenName
     ) public returns (uint256 id) {
-        Event memory e; 
+        Event memory e;
         e.id = genId();
         e.creator = msg.sender;
         e.startDate = startDate;
@@ -129,7 +130,7 @@ Add funcitons
         //TODO computing token deposit
         events[e.id] = e;
         emit AddPublicEvent(msg.sender, e.id);
-        require(SBT.transferFrom(msg.sender,address(this),100));
+        require(SBT.transferFrom(msg.sender, address(this), 100));
         return e.id;
     }
 
@@ -160,7 +161,8 @@ Add funcitons
         pr.refAddress = refAddress;
         events[eventId].participants[msg.sender] = pr;
         events[eventId].participantsSize.add(1);
-        events[eventId].participantsId.push(pr.id);
+        // events[eventId].participantsId.push(pr.id);
+        events[eventId].participantsAddresses.push(msg.sender);
         emit AddParticipant(eventId, msg.sender);
     }
 
@@ -176,6 +178,11 @@ Add funcitons
 
     function closeEvent(uint256 eventId) public {
         events[eventId].close = true;
+        for (uint256 i; i < events[eventId].participantsSize; i++) {
+            // uint256 participantId = events[eventId].participantsId[i];
+            address participantAddress = events[eventId].participantsAddresses[i];
+            SBT.transfer(participantAddress,1);
+        }
         emit CloseEvent(eventId);
     }
 

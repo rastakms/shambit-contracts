@@ -99,6 +99,8 @@ describe("Shambit Tests", function() {
       )
         .to.emit(ct, "AddPublicEvent")
         .withArgs(acc, 1);
+        expect(await SBTct.balanceOf(ct.address)).to.equal(100);
+    
     });
     it("Should get public first event", async function() {
       expect((await ct.getEvent(1)).capacity).to.be.equal(300);
