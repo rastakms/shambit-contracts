@@ -4,6 +4,7 @@ pragma solidity >=0.6.0 <0.7.0;
 
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
+import "./ShambitToken.sol";
 
 //import "@openzeppelin/contracts/access/Ownable.sol"; //https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol
 
@@ -13,6 +14,7 @@ contract Shambit {
     /*
 Variable
 */
+    IERC20 public SBT;
     mapping(uint256 => Event) events;
     uint256 idSeed = 0;
 
@@ -65,7 +67,8 @@ Structs
 
     string public purpose = " Programming hi amirrrrrrr";
 
-    constructor() public {
+    constructor(address shambitTokenAddress) public {
+        SBT =  ShambitToken(shambitTokenAddress);
         // uint256 ttt = block.timestamp;
         // console.log("now:", ttt);
         // what should we do on deploy?

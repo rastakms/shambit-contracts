@@ -39,8 +39,9 @@ describe("Shambit Tests", function() {
 
   before(async function() {
     const ContractFactory = await ethers.getContractFactory("Shambit");
-    ct = await ContractFactory.deploy();
-
+    const ShambitTokenContractFactory = await ethers.getContractFactory("ShambitToken");
+    SBTct= await ShambitTokenContractFactory.deploy(1000000)
+    ct = await ContractFactory.deploy(SBTct.address);
     // ct = await ShambitContract.new();
     // runs once before the first test in this block
   });

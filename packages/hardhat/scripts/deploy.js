@@ -9,8 +9,8 @@ const main = async () => {
 
   console.log("\n\n 📡 Deploying...\n");
 
-
-  const yourContract = await deploy("Shambit") // <-- add in constructor args like line 19 vvvv
+const shambitToken= await deploy("ShambitToken",[1000000])
+  const yourContract = await deploy("Shambit",[shambitToken.address]) // <-- add in constructor args like line 19 vvvv
 
   //const secondContract = await deploy("SecondContract")
 
