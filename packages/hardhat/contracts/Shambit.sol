@@ -79,6 +79,20 @@ Structs
 Enums
 */
 
+    /* 
+Modifiers
+*/
+    modifier eventExist(uint256 eventId) {
+        require(events[eventId].id != 0);
+
+        _;
+    }
+    modifier eventNotExist(uint256 eventId) {
+        require(events[eventId].id == 0);
+
+        _;
+    }
+
     /*
 Add funcitons 
 */
@@ -115,6 +129,7 @@ Add funcitons
         string memory IpfsCID,
         string memory tokenName
     ) public returns (uint256 id) {
+        console.log("empty events: ", events[23].id == 0);
         Event memory e;
         e.id = genId();
         e.creator = msg.sender;
@@ -153,7 +168,7 @@ Add funcitons
     //     uint256 b = 12;
     // }
 
-    function addParticipant(uint256 eventId, address payable refAddress)
+    function addParticipant(uint256 eventId, address payable refAddress) eventExist(eventId)
         public
     {
         Participant memory pr;
@@ -169,19 +184,20 @@ Add funcitons
     function setFinalActivityStatus(
         uint256 eventId,
         uint256[3] memory targetProgress
-    ) public {
+    ) public eventExist(eventId) {
         events[eventId].participants[msg.sender]
             .targetProgress = targetProgress;
         events[eventId].participants[msg.sender].complete = true;
         emit SetFinalActivityStatus(msg.sender, eventId);
     }
 
-    function closeEvent(uint256 eventId) public {
+    function closeEvent(uint256 eventId) public eventExist(eventId) {
         events[eventId].close = true;
         for (uint256 i; i < events[eventId].participantsSize; i++) {
             // uint256 participantId = events[eventId].participantsId[i];
-            address participantAddress = events[eventId].participantsAddresses[i];
-            SBT.transfer(participantAddress,1);
+            address participantAddress =
+                events[eventId].participantsAddresses[i];
+            SBT.transfer(participantAddress, 1);
         }
         emit CloseEvent(eventId);
     }
@@ -198,7 +214,7 @@ Getter functions
     function getEvent(uint256 id)
         public
         view
-        returns (
+        returns  (
             // string memory label,
             // uint256 eventId,
             uint256 startDate,
@@ -269,7 +285,7 @@ Getter functions
         return (p.refAddress, p.complete, p.targetProgress, p.verified);
     }
 
-    function editEvent(uint256 eventId, string memory IpfsCID) public {
+    function editEvent(uint256 eventId, string memory IpfsCID) public eventExist(eventId) {
         events[eventId].IpfsCID = IpfsCID;
         emit EditEvent(eventId);
     }
