@@ -93,8 +93,17 @@ Modifiers
         _;
     }
 
+    modifier hasParticipated(uint256 eventId, address sender) {
+        require(events[eventId].participants[sender].id != 0);
+        _;
+    }
+    modifier hasNotParticipated(uint256 eventId, address sender) {
+        require(events[eventId].participants[sender].id == 0);
+        _;
+    }
+
     /*
-Add funcitons 
+Setter funcitons 
 */
     // struct UintPair {
     //     uint256 id;
@@ -168,8 +177,10 @@ Add funcitons
     //     uint256 b = 12;
     // }
 
-    function addParticipant(uint256 eventId, address payable refAddress) eventExist(eventId)
+    function addParticipant(uint256 eventId, address payable refAddress)
         public
+        eventExist(eventId)
+        hasNotParticipated(eventId, msg.sender)
     {
         Participant memory pr;
         pr.id = genId();
@@ -184,7 +195,7 @@ Add funcitons
     function setFinalActivityStatus(
         uint256 eventId,
         uint256[3] memory targetProgress
-    ) public eventExist(eventId) {
+    ) public eventExist(eventId) hasParticipated(eventId, msg.sender) {
         events[eventId].participants[msg.sender]
             .targetProgress = targetProgress;
         events[eventId].participants[msg.sender].complete = true;
@@ -202,6 +213,14 @@ Add funcitons
         emit CloseEvent(eventId);
     }
 
+    function editEvent(uint256 eventId, string memory IpfsCID)
+        public
+        eventExist(eventId)
+    {
+        events[eventId].IpfsCID = IpfsCID;
+        emit EditEvent(eventId);
+    }
+
     // function setPurpose(string memory newPurpose) public {
     //     purpose = newPurpose;
     //     console.log(msg.sender, "set purpose to", purpose);
@@ -214,7 +233,7 @@ Getter functions
     function getEvent(uint256 id)
         public
         view
-        returns  (
+        returns (
             // string memory label,
             // uint256 eventId,
             uint256 startDate,
@@ -283,11 +302,6 @@ Getter functions
         Participant memory p = events[eventId].participants[participantAddress];
 
         return (p.refAddress, p.complete, p.targetProgress, p.verified);
-    }
-
-    function editEvent(uint256 eventId, string memory IpfsCID) public eventExist(eventId) {
-        events[eventId].IpfsCID = IpfsCID;
-        emit EditEvent(eventId);
     }
 
     /*
