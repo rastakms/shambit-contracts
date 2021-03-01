@@ -73,6 +73,7 @@
     }
   },
   "dependencies": {
-    "abi-decoder": "^2.4.0"
+    "abi-decoder": "^2.4.0",
+    "hardhat-gas-reporter": "^1.0.4"
   }
 }
