@@ -204,11 +204,31 @@ Setter funcitons
 
     function closeEvent(uint256 eventId) public eventExist(eventId) {
         events[eventId].close = true;
+        uint256[3] storage targetRewards = events[eventId].targetsReward;
+        uint256[3] storage sharePowerReward = events[eventId].sharePowerReward;
         for (uint256 i; i < events[eventId].participantsSize; i++) {
             // uint256 participantId = events[eventId].participantsId[i];
             address participantAddress =
                 events[eventId].participantsAddresses[i];
-            SBT.transfer(participantAddress, 1);
+            Participant storage participant =
+                events[eventId].participants[participantAddress];
+            uint256 reward1 =
+                (targetRewards[0] * participant.targetProgress[0]) / 100;
+            uint256 reward2 =
+                (targetRewards[1] * participant.targetProgress[1]) / 100;
+            uint256 reward3 =
+                (targetRewards[2] * participant.targetProgress[2]) / 100;
+            // console.log("reward", reward);
+            SBT.transfer(participantAddress, reward1 + reward2 + reward3);
+            if (participant.refAddress != address(0)) {
+                uint256 shareReward1 = (reward1 * sharePowerReward[0]) / 100;
+                uint256 shareReward2 = (reward2 * sharePowerReward[1]) / 100;
+                uint256 shareReward3 = (reward3 * sharePowerReward[2]) / 100;
+                SBT.transfer(
+                    participant.refAddress,
+                    shareReward1 + shareReward2 + shareReward3
+                );
+            }
         }
         emit CloseEvent(eventId);
     }
