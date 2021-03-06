@@ -1,4 +1,4 @@
-const { ethers } = require("hardhat");
+// const { ethers } = require("hardhat");
 const { use, expect } = require("chai");
 const { solidity } = require("ethereum-waffle");
 const abiDecoder = require("abi-decoder");
@@ -53,7 +53,8 @@ describe("Shambit Tests", function() {
       let acc = accounts[0].address;
       let acc1 = accounts[1].address;
       let tNow = 2213;
-      SBTct.approve(ct.address, 100);
+      const expectedCost = 198000;
+      await SBTct.approve(ct.address, 198000);
       await expect(
         ct.addPublicEvent(
           (startDate = tNow),
@@ -61,54 +62,93 @@ describe("Shambit Tests", function() {
           (location = "35.7016082,51.3366829"),
           (viewRange = 20),
           (capacity = 300),
-          (targetsReward = [12, 34, 23]),
-          (sharePowerReward = [23, 43, 21]),
+          (targetsReward = [100, 200, 300]),
+          (sharePowerReward = [10, 10, 10]),
+          (participats = [
+            // accounts[3].address,
+            // accounts[4].address,
+            // accounts[5].address,
+            // accounts[6].address,
+            // accounts[7].address,
+            // accounts[8].address,
+            // accounts[9].address,
+          ]),
           (IpfsCID = "QmdXUKh8LU75HTVhqjAMyBqQEZ9Cr7cHjBrVzjF3ixeNqZ"),
           (tokenName = "SBT")
         )
       )
         .to.emit(ct, "AddPublicEvent")
         .withArgs(acc, 1);
-      expect(await SBTct.balanceOf(ct.address)).to.equal(100);
+      expect(await SBTct.balanceOf(ct.address)).to.equal(198000);
     });
     it("Should get public first event", async function() {
       expect((await ct.getEvent(1)).capacity).to.be.equal(300);
       //  parseInt((await ct.getEvent(1)).capacity._hex)
     });
+
+    it("Should verify event", async function() {
+      await ct.verifyEvent(1);
+      expect((await ct.getEventDetail(1)).verified).to.be.equal(true);
+      //  parseInt((await ct.getEvent(1)).capacity._hex)
+    });
+
+    it("Should edit first event, just IpfsCID must e change", async function() {
+      await expect(
+        ct.editEvent(1, "QmaGZnbm9UE5VBWimUEsecLyHB7NzesmT6MmmDzCozKjj7")
+      )
+        .to.emit(ct, "EditEvent")
+        .withArgs(1);
+    });
+
     it("Should add participant with reffaddres ", async function() {
       const accounts = await ethers.getSigners();
-      let acc = accounts[0].address;
-      expect(ct.addParticipant(1, acc))
+      let acc = accounts[1];
+      let accAddress = acc.address;
+      let refAddress = accounts[2].address;
+      await expect(ct.connect(acc).addParticipant(1, refAddress))
         .to.emit(ct, "AddParticipant")
-        .withArgs(1, acc);
+        .withArgs(1, accAddress);
     });
-    it("Should can set final activity of participant", async function() {
+    it("Should set final activity of participant", async function() {
       const accounts = await ethers.getSigners();
-      let acc = accounts[0].address;
-      expect(ct.setFinalActivityStatus(1, [45, 45, 45]))
+      let acc = accounts[1];
+      let accAddress = acc.address;
+      await expect(ct.connect(acc).setFinalActivityStatus(1, [50, 50, 50]))
         .to.emit(ct, "SetFinalActivityStatus")
-        .withArgs(acc, 1);
+        .withArgs(accAddress, 1);
     });
-    it("Should close first event and transfer all reward to participant and send back extra assets to owner of event", async function() {
+
+    it("Should close first event", async function() {
       expect((await ct.getEventDetail(1)).close).to.be.equal(false);
 
-      expect(ct.closeEvent(1))
+      await expect(ct.closeEvent(1))
         .to.emit(ct, "CloseEvent")
         .withArgs(1);
       expect((await ct.getEventDetail(1)).close).to.be.equal(true);
     });
 
-    it("Should edit first event, just IpfsCID must e change", async function() {
-      expect(ct.editEvent(1, "QmaGZnbm9UE5VBWimUEsecLyHB7NzesmT6MmmDzCozKjj7"))
-        .to.emit(ct, "EditEvent")
-        .withArgs(1);
-    });
     it("Should get participant data for first event and specific participant address", async function() {
       const accounts = await ethers.getSigners();
-      let acc = accounts[0].address;
-      expect((await ct.getParticipantStatus(1, acc)).refAddress).to.be.equal(
-        acc
-      );
+      let acc = accounts[1];
+      let accAddress = acc.address;
+      let refAddress = accounts[2].address;
+      const participatData = await ct.getParticipantStatus(1, accAddress);
+      const refDataData = await ct.getParticipantStatus(1, refAddress);
+      console.log(participatData.reward.toString());
+      console.log(refDataData.reward.toString());
+      expect(participatData.refAddress).to.be.equal(refAddress);
     });
+
+    // it("User should withdraw his rewards", async function() {
+    //   const accounts = await ethers.getSigners();
+    //   let acc = accounts[9];
+    //   let accAddress = acc.address;
+    //   await ct.connect(acc).withdrawReward(1);
+    //   const participatData = await ct.getParticipantStatus(1, accAddress);
+    //   console.log("user's reward", participatData.reward.toString());
+    //   // await ct.connect(ref).withdrawReward(1);
+    //   const participatTokens = await SBTct.balanceOf(accAddress);
+    //   console.log("user's token balance", participatTokens.toString());
+    // });
   });
 });
