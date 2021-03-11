@@ -56,7 +56,7 @@ describe("Shambit Tests", function() {
       const expectedCost = 198000;
       await SBTct.approve(ct.address, 198000);
       await expect(
-        ct.addPublicEvent(
+        ct.addEvent(
           (startDate = tNow),
           (endDate = tNow),
           (location = "35.7016082,51.3366829"),
@@ -77,7 +77,7 @@ describe("Shambit Tests", function() {
           (tokenName = "SBT")
         )
       )
-        .to.emit(ct, "AddPublicEvent")
+        .to.emit(ct, "AddEvent")
         .withArgs(acc, 1);
       expect(await SBTct.balanceOf(ct.address)).to.equal(198000);
     });

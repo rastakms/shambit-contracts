@@ -23,7 +23,7 @@ Variable
     /*
 Events
 */
-    event AddPublicEvent(address sender, uint256 eventId);
+
     event SetPurpose(address sender, string purpose);
     event AddEvent(address sender, uint256 eventId);
     event AddParticipant(uint256, address);
@@ -136,11 +136,11 @@ Modifiers
     }
 
     modifier checkTargetProgress(uint256[] memory targetProgress) {
-        require(
-            targetProgress[0] <= 100 &&
-                targetProgress[1] <= 100 &&
-                targetProgress[2] <= 100
-        );
+        for (uint256 i = 0; i < targetProgress.length; i++) {
+            if (targetProgress[i] > 100) {
+                revert("Array is not correct percentage number");
+            }
+        }
         _;
     }
 
@@ -174,7 +174,7 @@ Setter funcitons
     //     //    console.log("ev:",ev);
     // }
 
-    function addPublicEvent(
+    function addEvent(
         uint256 startDate,
         uint256 endDate,
         string memory location,
@@ -206,7 +206,7 @@ Setter funcitons
             for (uint256 i = 0; i < participats.length; i++)
                 addPrivateParticipant(e.id, participats[i]);
         }
-        emit AddPublicEvent(msg.sender, e.id);
+        emit AddEvent(msg.sender, e.id);
         IERC20 token = IERC20(tokens[tokenName]);
         require(
             token.transferFrom(
