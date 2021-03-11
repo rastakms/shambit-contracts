@@ -37,6 +37,8 @@
     "balance": "hardhat balance",
     "send": "hardhat send",
     "generate": "hardhat generate",
-    "account": "hardhat account"
+    "account": "hardhat account",
+    "approveSBT": "hardhat run scripts/forLazies/approveSBT.js",
+    "addPublicEvent": "hardhat run scripts/forLazies/addPublicEvent.js"
   }
 }

@@ -53,25 +53,6 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "address",
-        "name": "sender",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "eventId",
-        "type": "uint256"
-      }
-    ],
-    "name": "AddPublicEvent",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
         "internalType": "uint256",
         "name": "eventId",
         "type": "uint256"
@@ -148,24 +129,6 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "eventId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address payable",
-        "name": "refAddress",
-        "type": "address"
-      }
-    ],
-    "name": "addParticipant",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
         "name": "startDate",
         "type": "uint256"
       },
@@ -190,14 +153,19 @@
         "type": "uint256"
       },
       {
-        "internalType": "uint256[3]",
+        "internalType": "uint256[]",
         "name": "targetsReward",
-        "type": "uint256[3]"
+        "type": "uint256[]"
       },
       {
-        "internalType": "uint256[3]",
+        "internalType": "uint256[]",
         "name": "sharePowerReward",
-        "type": "uint256[3]"
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "address payable[]",
+        "name": "participats",
+        "type": "address[]"
       },
       {
         "internalType": "string",
@@ -210,7 +178,7 @@
         "type": "string"
       }
     ],
-    "name": "addPublicEvent",
+    "name": "addEvent",
     "outputs": [
       {
         "internalType": "uint256",
@@ -227,10 +195,99 @@
         "internalType": "uint256",
         "name": "eventId",
         "type": "uint256"
+      },
+      {
+        "internalType": "address payable",
+        "name": "refAddress",
+        "type": "address"
+      }
+    ],
+    "name": "addParticipant",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "eventId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address payable",
+        "name": "participatAddress",
+        "type": "address"
+      }
+    ],
+    "name": "addPrivateParticipant",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "tokenName",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "tokenAddress",
+        "type": "address"
+      }
+    ],
+    "name": "addToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "capacity",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "targetsReward",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "sharePowerReward",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "calculateDeposit",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "requiredDeposit",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "eventId",
+        "type": "uint256"
       }
     ],
     "name": "closeEvent",
-    "outputs": [],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -317,14 +374,14 @@
         "type": "string"
       },
       {
-        "internalType": "uint256[3]",
+        "internalType": "uint256[]",
         "name": "targetsReward",
-        "type": "uint256[3]"
+        "type": "uint256[]"
       },
       {
-        "internalType": "uint256[3]",
+        "internalType": "uint256[]",
         "name": "sharePowerReward",
-        "type": "uint256[3]"
+        "type": "uint256[]"
       },
       {
         "internalType": "uint256",
@@ -371,14 +428,19 @@
         "type": "bool"
       },
       {
-        "internalType": "uint256[3]",
+        "internalType": "uint256[]",
         "name": "targetProgress",
-        "type": "uint256[3]"
+        "type": "uint256[]"
       },
       {
         "internalType": "bool",
         "name": "verified",
         "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "reward",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -405,12 +467,57 @@
         "type": "uint256"
       },
       {
-        "internalType": "uint256[3]",
+        "internalType": "uint256[]",
         "name": "targetProgress",
-        "type": "uint256[3]"
+        "type": "uint256[]"
       }
     ],
     "name": "setFinalActivityStatus",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "eventId",
+        "type": "uint256"
+      }
+    ],
+    "name": "verifyEvent",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "eventId",
+        "type": "uint256"
+      }
+    ],
+    "name": "withdrawRemainingDeposit",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "eventId",
+        "type": "uint256"
+      }
+    ],
+    "name": "withdrawReward",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

@@ -101,7 +101,7 @@ module.exports = {
     enabled: true,
     currency:"USD",
     showTimeSpent:true,
-    // coinmarketcap:"a0b50ce5-2a3d-46e2-a61c-3ce50f05be78",
+    coinmarketcap:"a0b50ce5-2a3d-46e2-a61c-3ce50f05be78",
     // outputFile:"./test/gasReport.txt"
   },
   solidity: {
