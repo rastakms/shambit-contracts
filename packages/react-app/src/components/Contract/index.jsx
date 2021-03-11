@@ -112,7 +112,7 @@ export default function Contract({
               renderItem={item => {
                 console.log("Itemm", item);
                 return (
-                  <List.Item key={item.blockNumber + "_" + item.sender + "_" + item.eventId._hex}>
+                  <List.Item key={item.blockNumber + "_" + item.sender + "_" + item[1]._hex}>
                     <Address value={item[0]} ensProvider={mainnetProvider} fontSize={16} /> =>
                     {item[1]._hex}
                   </List.Item>
