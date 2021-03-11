@@ -38,10 +38,6 @@ const main = async () => {
     (IpfsCID = "QmdXUKh8LU75HTVhqjAMyBqQEZ9Cr7cHjBrVzjF3ixeNqZ"),
     (tokenName = "SBT")
   );
-  Shambit.once(eventId.hash, (transaction) => {
-    // Emitted when the transaction has been mined
-    console.log("Event id is:", transaction);
-})
 };
 main()
   .then(() => process.exit(0))

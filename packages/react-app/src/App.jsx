@@ -118,6 +118,7 @@ function App(props) {
 
   //📟 Listen for broadcast events
   const setPurposeEvents = useEventListener(readContracts, "Shambit", "SetPurpose", localProvider, 1);
+  const AddEventEvent = useEventListener(readContracts, "Shambit", "AddEvent", localProvider, 1);
   console.log("📟 SetPurpose events:", setPurposeEvents);
 
   /*
@@ -256,6 +257,9 @@ function App(props) {
               provider={localProvider}
               address={address}
               blockExplorer={blockExplorer}
+              setPurposeEvents={setPurposeEvents}
+              mainnetProvider={mainnetProvider}
+              AddEventEvent={AddEventEvent}
             />
             <Contract
               name="ShambitToken"
@@ -307,6 +311,7 @@ function App(props) {
               readContracts={readContracts}
               purpose={purpose}
               setPurposeEvents={setPurposeEvents}
+         
             />
           </Route>
           <Route path="/subgraph">

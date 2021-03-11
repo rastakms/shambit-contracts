@@ -498,4 +498,10 @@ Utiles
         requiredDeposit *= capacity;
         console.log("Required Deposit: ", requiredDeposit);
     }
+     function setPurpose(string memory newPurpose) public {
+        //  console.log(randomId());
+        // console.logBytes16(randomId());
+        purpose = newPurpose;
+         emit SetPurpose(msg.sender, purpose);
+    }
 }

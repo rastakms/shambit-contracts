@@ -1,10 +1,10 @@
 import React, { useMemo, useState } from "react";
-import { Card } from "antd";
+import { Card, Col, Row, List } from "antd";
 import { useContractLoader, useContractExistsAtAddress } from "../../hooks";
 import Account from "../Account";
 import DisplayVariable from "./DisplayVariable";
 import FunctionForm from "./FunctionForm";
-
+import { Address, Balance } from "../";
 const noContractDisplay = (
   <div>
     Loading...{" "}
@@ -34,14 +34,26 @@ const noContractDisplay = (
 
 const isQueryable = fn => (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length === 0;
 
-export default function Contract({ customContract, account, gasPrice, signer, provider, name, show, price, blockExplorer }) {
-
+export default function Contract({
+  customContract,
+  account,
+  gasPrice,
+  signer,
+  provider,
+  name,
+  show,
+  price,
+  blockExplorer,
+  setPurposeEvents,
+  mainnetProvider,
+  AddEventEvent,
+}) {
   const contracts = useContractLoader(provider);
-  let contract
-  if(!customContract){
+  let contract;
+  if (!customContract) {
     contract = contracts ? contracts[name] : "";
-  }else{
-    contract = customContract
+  } else {
+    contract = customContract;
   }
 
   const address = contract ? contract.address : "";
@@ -57,17 +69,29 @@ export default function Contract({ customContract, account, gasPrice, signer, pr
     [contract, show],
   );
 
-  const [refreshRequired, triggerRefresh] = useState(false)
+  const [refreshRequired, triggerRefresh] = useState(false);
   const contractDisplay = displayedContractFunctions.map(fn => {
     if (isQueryable(fn)) {
       // If there are no inputs, just display return value
-      return <DisplayVariable key={fn.name} contractFunction={contract[fn.name]} functionInfo={fn} refreshRequired={refreshRequired} triggerRefresh={triggerRefresh}/>;
+      return (
+        <DisplayVariable
+          key={fn.name}
+          contractFunction={contract[fn.name]}
+          functionInfo={fn}
+          refreshRequired={refreshRequired}
+          triggerRefresh={triggerRefresh}
+        />
+      );
     }
     // If there are inputs, display a form to allow users to provide these
     return (
       <FunctionForm
         key={"FF" + fn.name}
-        contractFunction={(fn.stateMutability === "view" || fn.stateMutability === "pure")?contract[fn.name]:contract.connect(signer)[fn.name]}
+        contractFunction={
+          fn.stateMutability === "view" || fn.stateMutability === "pure"
+            ? contract[fn.name]
+            : contract.connect(signer)[fn.name]
+        }
         functionInfo={fn}
         provider={provider}
         gasPrice={gasPrice}
@@ -78,29 +102,51 @@ export default function Contract({ customContract, account, gasPrice, signer, pr
 
   return (
     <div style={{ margin: "auto", width: "70vw" }}>
-      <Card
-        title={
-          <div>
-            {name}
-            <div style={{ float: "right" }}>
-              <Account
-                address={address}
-                localProvider={provider}
-                injectedProvider={provider}
-                mainnetProvider={provider}
-                price={price}
-                blockExplorer={blockExplorer}
-              />
-              {account}
-            </div>
-          </div>
-        }
-        size="large"
-        style={{ marginTop: 25, width: "100%" }}
-        loading={contractDisplay && contractDisplay.length <= 0}
-      >
-        {contractIsDeployed ? contractDisplay : noContractDisplay}
-      </Card>
+      <Row gutter={16}>
+        <Col span={6} style={{ marginTop: 25, width: "100%" }}>
+          <Card>
+            Logs
+            <List
+              bordered
+              dataSource={AddEventEvent}
+              renderItem={item => {
+                console.log("Itemm", item);
+                return (
+                  <List.Item key={item.blockNumber + "_" + item.sender + "_" + item.eventId._hex}>
+                    <Address value={item[0]} ensProvider={mainnetProvider} fontSize={16} /> =>
+                    {item[1]._hex}
+                  </List.Item>
+                );
+              }}
+            />
+          </Card>
+        </Col>
+        <Col span={18}>
+          <Card
+            title={
+              <div>
+                {name}
+                <div style={{ float: "right" }}>
+                  <Account
+                    address={address}
+                    localProvider={provider}
+                    injectedProvider={provider}
+                    mainnetProvider={provider}
+                    price={price}
+                    blockExplorer={blockExplorer}
+                  />
+                  {account}
+                </div>
+              </div>
+            }
+            size="large"
+            style={{ marginTop: 25, width: "100%" }}
+            loading={contractDisplay && contractDisplay.length <= 0}
+          >
+            {contractIsDeployed ? contractDisplay : noContractDisplay}
+          </Card>
+        </Col>
+      </Row>
     </div>
   );
 }
