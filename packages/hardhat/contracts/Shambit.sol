@@ -25,7 +25,8 @@ Events
 */
 
     event SetPurpose(address sender, string purpose);
-    event AddEvent(address sender, uint256 eventId);
+    event AddEvent(address sender, uint256 
+    );
     event AddParticipant(uint256, address);
     event SetFinalActivityStatus(address sender, uint256 eventId);
     event CloseEvent(uint256 eventId);
@@ -208,13 +209,15 @@ Setter funcitons
         }
         emit AddEvent(msg.sender, e.id);
         IERC20 token = IERC20(tokens[tokenName]);
+        uint depositAmount=     calculateDeposit(capacity, targetsReward, sharePowerReward);
+
         require(
             token.transferFrom(
                 msg.sender,
                 address(this),
-                calculateDeposit(capacity, targetsReward, sharePowerReward)
-            )
+depositAmount            )
         );
+        events[e.id].remainingDeposit=depositAmount;
         return e.id;
     }
 
