@@ -38,6 +38,8 @@ const main = async () => {
     (IpfsCID = "QmdXUKh8LU75HTVhqjAMyBqQEZ9Cr7cHjBrVzjF3ixeNqZ"),
     (tokenName = "SBT")
   );
+
+  await Shambit.verifyEvent(1);
 };
 main()
   .then(() => process.exit(0))
