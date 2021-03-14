@@ -5,7 +5,7 @@ const abiDecoder = require("abi-decoder");
 use(solidity);
 
 const ShambitContract = artifacts.require("Shambit");
-describe("Shambit Tests : addEvent function  tests", function() {
+describe("Shambit Tests : addParticipant function  tests", function() {
   let ct;
 
   before(async function() {
@@ -36,33 +36,8 @@ describe("Shambit Tests : addEvent function  tests", function() {
     // runs after each test in this block
   });
 
-  it("Should add new public  event without custom target  when gets correct inputs", async function() {
+  it("should not add participant  for private event (revert expected)", async () => {
     const accounts = await ethers.getSigners();
-    let acc = accounts[0].address;
-    await expect(
-      ct.addEvent(
-        (startDate = 1000),
-        (endDate = 1000 + 1),
-        (location = "35.7016082,51.3366829"),
-        (viewRange = 20),
-        (capacity = 30),
-        (targetsReward = [10, 20, 30]),
-        (sharePowerReward = [10, 10, 10]),
-        (participats = []),
-        (IpfsCID = "QmdXUKh8LU75HTVhqjAMyBqQEZ9Cr7cHjBrVzjF3ixeNqZ"),
-        (tokenName = "SBT")
-      )
-    )
-      .to.emit(ct, "AddEvent")
-      .withArgs(acc, 1);
-    expect(await SBTct.balanceOf(ct.address)).to.equal(1980);
-    expect((await ct.getEvent(1)).capacity).to.be.equal(30);
-    expect((await ct.getEvent(1)).isPublic).to.be.equal(true);
-  });
-
-  it("Should added new  private  event  when gets correct inputs", async function() {
-    const accounts = await ethers.getSigners();
-
     let acc = accounts[0].address;
     await expect(
       ct.addEvent(
@@ -88,13 +63,11 @@ describe("Shambit Tests : addEvent function  tests", function() {
     )
       .to.emit(ct, "AddEvent")
       .withArgs(acc, 1);
-    expect(await SBTct.balanceOf(ct.address)).to.equal(19800);
-    expect((await ct.getEvent(1)).capacity).to.be.equal(30);
-    expect((await ct.getEvent(1)).isPublic).to.be.equal(false);
-  });
-  it("Should  not add new   event bec capacity and partcicipant are empty (revert expected)", async function() {
-    const accounts = await ethers.getSigners();
 
+    await expect(ct.addParticipant(1)).to.be.reverted;
+  });
+  it("should  add participant  for public event  after verification ", async () => {
+    const accounts = await ethers.getSigners();
     let acc = accounts[0].address;
     await expect(
       ct.addEvent(
@@ -102,57 +75,110 @@ describe("Shambit Tests : addEvent function  tests", function() {
         (endDate = 300000 + 1),
         (location = "35.7016082,51.3366829"),
         (viewRange = 20),
-        (capacity = 0),
+        (capacity = 30),
         (targetsReward = [100, 200, 300]),
         (sharePowerReward = [10, 10, 10]),
         (participats = []),
         (IpfsCID = "QmdXUKh8LU75HTVhqjAMyBqQEZ9Cr7cHjBrVzjF3ixeNqZ"),
         (tokenName = "SBT")
       )
-    ).to.be.reverted;
+    )
+      .to.emit(ct, "AddEvent")
+      .withArgs(acc, 1);
+
+    await ct.verifyEvent(1);
+    expect((await ct.getEventDetail(1)).verified).to.be.equal(true);
+    await expect(ct.addParticipant(1))
+      .to.emit(ct, "AddParticipant")
+      .withArgs(1, acc);
   });
 
-  it("Should  not add new   event bec start and end time is not correct (revert expected)", async function() {
+  it("should  add participant  for public event  after verification with referral address  ", async () => {
     const accounts = await ethers.getSigners();
-
     let acc = accounts[0].address;
+    let acc1 = accounts[1].address;
     await expect(
       ct.addEvent(
-        (startDate = Date.now()),
-        (endDate = Date.now()-1),
+        (startDate = 100000),
+        (endDate = 300000 + 1),
         (location = "35.7016082,51.3366829"),
         (viewRange = 20),
-        (capacity = 20),
+        (capacity = 30),
         (targetsReward = [100, 200, 300]),
         (sharePowerReward = [10, 10, 10]),
         (participats = []),
         (IpfsCID = "QmdXUKh8LU75HTVhqjAMyBqQEZ9Cr7cHjBrVzjF3ixeNqZ"),
         (tokenName = "SBT")
       )
-    ).to.be.reverted;
+    )
+      .to.emit(ct, "AddEvent")
+      .withArgs(acc, 1);
+
+    await ct.verifyEvent(1);
+    expect((await ct.getEventDetail(1)).verified).to.be.equal(true);
+    await expect(ct.addParticipant(1))
+      .to.emit(ct, "AddParticipant")
+      .withArgs(1, acc);
+    await expect(ct.connect(accounts[1]).addParticipantWithRefAddress(1, acc))
+      .to.emit(ct, "AddParticipant")
+      .withArgs(1, acc1);
   });
-
-
-
-  it("Should  not add new   event bec   shareReward has not correct number(revert expected)", async function() {
+  it("should  not add participant  for public event  after verification with referral address  bec referral person doesnt participate before ", async () => {
     const accounts = await ethers.getSigners();
-
     let acc = accounts[0].address;
+    let acc1 = accounts[1].address;
     await expect(
       ct.addEvent(
-        (startDate = Date.now()),
-        (endDate = Date.now()+1),
+        (startDate = 100000),
+        (endDate = 300000 + 1),
         (location = "35.7016082,51.3366829"),
         (viewRange = 20),
-        (capacity = 20),
-        (targetsReward = [120]),
-        (sharePowerReward = [120]),
+        (capacity = 30),
+        (targetsReward = [100, 200, 300]),
+        (sharePowerReward = [10, 10, 10]),
         (participats = []),
         (IpfsCID = "QmdXUKh8LU75HTVhqjAMyBqQEZ9Cr7cHjBrVzjF3ixeNqZ"),
         (tokenName = "SBT")
       )
-    ).to.be.reverted;
+    )
+      .to.emit(ct, "AddEvent")
+      .withArgs(acc, 1);
+
+    await ct.verifyEvent(1);
+    expect((await ct.getEventDetail(1)).verified).to.be.equal(true);
+    await expect(ct.addParticipant(1))
+      .to.emit(ct, "AddParticipant")
+      .withArgs(1, acc);
+    await expect(ct.connect(accounts[1]).addParticipantWithRefAddress(1, accounts[2].address))
+      .to.be.reverted
   });
 
-  
+  it("should not  add participant  for public event  after verification bec it already added (revert expected)", async () => {
+    const accounts = await ethers.getSigners();
+    let acc = accounts[0].address;
+    await expect(
+      ct.addEvent(
+        (startDate = 100000),
+        (endDate = 300000 + 1),
+        (location = "35.7016082,51.3366829"),
+        (viewRange = 20),
+        (capacity = 30),
+        (targetsReward = [100, 200, 300]),
+        (sharePowerReward = [10, 10, 10]),
+        (participats = []),
+        (IpfsCID = "QmdXUKh8LU75HTVhqjAMyBqQEZ9Cr7cHjBrVzjF3ixeNqZ"),
+        (tokenName = "SBT")
+      )
+    )
+      .to.emit(ct, "AddEvent")
+      .withArgs(acc, 1);
+
+    await ct.verifyEvent(1);
+    expect((await ct.getEventDetail(1)).verified).to.be.equal(true);
+    await expect(ct.addParticipant(1))
+      .to.emit(ct, "AddParticipant")
+      .withArgs(1, acc);
+
+    await expect(ct.addParticipant(1)).to.be.reverted;
+  });
 });
