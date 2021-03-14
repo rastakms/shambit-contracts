@@ -25,8 +25,7 @@ Events
 */
 
     event SetPurpose(address sender, string purpose);
-    event AddEvent(address sender, uint256 
-    );
+    event AddEvent(address sender, uint256);
     event AddParticipant(uint256, address);
     event SetFinalActivityStatus(address sender, uint256 eventId);
     event CloseEvent(uint256 eventId);
@@ -136,17 +135,25 @@ Modifiers
         _;
     }
 
-    modifier checkTargetProgress(uint256[] memory targetProgress) {
-        for (uint256 i = 0; i < targetProgress.length; i++) {
-            if (targetProgress[i] > 100) {
+    modifier checkArrayPercentage(uint256[] memory arr) {
+        for (uint256 i = 0; i < arr.length; i++) {
+            if (arr[i] > 100) {
                 revert("Array is not correct percentage number");
             }
         }
         _;
     }
+    modifier checkLarger(uint256 a, uint256 b) {
+        require(a < b);
+        _;
+    }
 
     modifier onlyJudge() {
         require(msg.sender == judge);
+        _;
+    }
+    modifier onlyPosetive(uint256 num) {
+        require(num > 0);
         _;
     }
 
@@ -186,7 +193,13 @@ Setter funcitons
         address payable[] memory participats,
         string memory IpfsCID,
         string memory tokenName
-    ) public tokenExists(tokenName) returns (uint256 id) {
+    )
+        public
+        tokenExists(tokenName)
+        checkArrayPercentage(sharePowerReward)
+        checkLarger(startDate, endDate)
+        returns (uint256 id)
+    {
         Event memory e;
         e.id = genId();
         e.creator = msg.sender;
@@ -206,18 +219,19 @@ Setter funcitons
         if (!e.isPublic) {
             for (uint256 i = 0; i < participats.length; i++)
                 addPrivateParticipant(e.id, participats[i]);
+        } else {
+            require(
+                capacity > 0,
+                "Capacity must be grater than 0 or add private event"
+            );
         }
         emit AddEvent(msg.sender, e.id);
         IERC20 token = IERC20(tokens[tokenName]);
-        uint depositAmount=     calculateDeposit(capacity, targetsReward, sharePowerReward);
+        uint256 depositAmount =
+            calculateDeposit(capacity, targetsReward, sharePowerReward);
 
-        require(
-            token.transferFrom(
-                msg.sender,
-                address(this),
-depositAmount            )
-        );
-        events[e.id].remainingDeposit=depositAmount;
+        require(token.transferFrom(msg.sender, address(this), depositAmount));
+        events[e.id].remainingDeposit = depositAmount;
         return e.id;
     }
 
@@ -264,7 +278,29 @@ depositAmount            )
         emit AddParticipant(eventId, participatAddress);
     }
 
-    function addParticipant(uint256 eventId, address payable refAddress)
+    function addParticipantWithRefAddress(
+        uint256 eventId,
+        address payable refAddress
+    )
+        public
+        eventExist(eventId)
+        eventNotClosed(eventId)
+        eventVerified(eventId)
+        hasNotParticipated(eventId, msg.sender)
+        hasParticipated(eventId, refAddress)
+    {
+        require(events[eventId].isPublic, "Event is private");
+        Participant memory pr;
+        pr.id = genId();
+        pr.refAddress = refAddress;
+        events[eventId].participants[msg.sender] = pr;
+        events[eventId].participantsSize.add(1);
+        // events[eventId].participantsId.push(pr.id);
+        events[eventId].participantsAddresses.push(msg.sender);
+        emit AddParticipant(eventId, msg.sender);
+    }
+
+    function addParticipant(uint256 eventId)
         public
         eventExist(eventId)
         eventNotClosed(eventId)
@@ -274,7 +310,6 @@ depositAmount            )
         require(events[eventId].isPublic, "Event is private");
         Participant memory pr;
         pr.id = genId();
-        pr.refAddress = refAddress;
         events[eventId].participants[msg.sender] = pr;
         events[eventId].participantsSize.add(1);
         // events[eventId].participantsId.push(pr.id);
@@ -290,7 +325,7 @@ depositAmount            )
         eventExist(eventId)
         eventNotClosed(eventId)
         hasParticipated(eventId, msg.sender)
-        checkTargetProgress(targetProgress)
+        checkArrayPercentage(targetProgress)
     {
         events[eventId].participants[msg.sender]
             .targetProgress = targetProgress;
@@ -493,18 +528,19 @@ Utiles
         uint256 capacity,
         uint256[] memory targetsReward,
         uint256[] memory sharePowerReward
-    ) public view returns (uint256 requiredDeposit) {
+    ) public pure returns (uint256 requiredDeposit) {
         for (uint256 i = 0; i < targetsReward.length; i++)
             requiredDeposit +=
                 targetsReward[i] +
                 ((targetsReward[i] * sharePowerReward[i]) / 100);
         requiredDeposit *= capacity;
-        console.log("Required Deposit: ", requiredDeposit);
+        // console.log("Required Deposit: ", requiredDeposit);
     }
-     function setPurpose(string memory newPurpose) public {
+
+    function setPurpose(string memory newPurpose) public {
         //  console.log(randomId());
         // console.logBytes16(randomId());
         purpose = newPurpose;
-         emit SetPurpose(msg.sender, purpose);
+        emit SetPurpose(msg.sender, purpose);
     }
 }
