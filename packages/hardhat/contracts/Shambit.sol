@@ -156,6 +156,10 @@ Modifiers
         require(num > 0);
         _;
     }
+    modifier onlyCreatorOfEvent(uint256 eventId) {
+        require(events[eventId].creator == msg.sender);
+        _;
+    }
 
     /*
 Setter funcitons 
@@ -329,6 +333,7 @@ Setter funcitons
     {
         events[eventId].participants[msg.sender]
             .targetProgress = targetProgress;
+        require(events[eventId].participants[msg.sender].complete == false);
         events[eventId].participants[msg.sender].complete = true;
 
         uint256[] storage targetRewards = events[eventId].targetsReward;
@@ -356,6 +361,7 @@ Setter funcitons
         public
         eventExist(eventId)
         eventNotClosed(eventId)
+        onlyCreatorOfEvent(eventId)
         returns (bool)
     {
         require(!events[eventId].verified || now > events[eventId].endDate);
@@ -392,7 +398,7 @@ Setter funcitons
     function withdrawReward(uint256 eventId) external eventClosed(eventId) {
         // uint256 participantId = events[eventId].participantsId[i];
         uint256 reward = events[eventId].participants[msg.sender].reward;
-
+        require(reward > 0);
         events[eventId].participants[msg.sender].reward = 0;
 
         IERC20 token = IERC20(tokens[events[eventId].tokenName]);
@@ -405,6 +411,7 @@ Setter funcitons
         eventClosed(eventId)
     {
         uint256 remainingDeposit = events[eventId].remainingDeposit;
+         events[eventId].remainingDeposit =0;
         address creator = events[eventId].creator;
         IERC20 token = IERC20(tokens[events[eventId].tokenName]);
         token.transfer(creator, remainingDeposit);
