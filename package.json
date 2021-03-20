@@ -32,7 +32,7 @@
     "ship": "yarn workspace @scaffold-eth/react-app ship",
     "generate": "yarn workspace @scaffold-eth/hardhat generate",
     "account": "yarn workspace @scaffold-eth/hardhat account",
-    "mine": "cd packages/hardhat && npx hardhat mine",
+    "mineContractAddress": "cd packages/hardhat && npx hardhat mineContractAddress",
     "wallet": "cd packages/hardhat && npx hardhat wallet",
     "fundedwallet": "cd packages/hardhat && npx hardhat fundedwallet",
     "flatten": "cd packages/hardhat && npx hardhat flatten",
@@ -47,7 +47,9 @@
     "graph-ship-local": "yarn graph-prepare && yarn graph-codegen && yarn graph-deploy-local",
     "deploy-and-graph": "yarn deploy && yarn graph-ship-local",
     "approveSBT": "yarn workspace @scaffold-eth/hardhat approveSBT",
-    "addPublicEvent": "yarn workspace @scaffold-eth/hardhat addPublicEvent"
+    "addPublicEvent": "yarn workspace @scaffold-eth/hardhat addPublicEvent",
+    "theme": "yarn workspace @scaffold-eth/react-app theme",
+    "watch-theme": "yarn workspace @scaffold-eth/react-app watch"
   },
   "workspaces": {
     "packages": [
@@ -55,7 +57,9 @@
     ],
     "nohoist": [
       "**/@graphprotocol/graph-ts",
-      "**/@graphprotocol/graph-ts/**"
+      "**/@graphprotocol/graph-ts/**",
+      "**/hardhat",
+      "**/hardhat/**"
     ]
   },
   "devDependencies": {
@@ -76,6 +80,7 @@
   },
   "dependencies": {
     "abi-decoder": "^2.4.0",
+    "hardhat": "^2.1.1",
     "hardhat-gas-reporter": "^1.0.4"
   }
 }

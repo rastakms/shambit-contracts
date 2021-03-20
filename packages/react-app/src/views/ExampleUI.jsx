@@ -36,7 +36,7 @@ export default function ExampleUI({purpose, setPurposeEvents, address, mainnetPr
 
         Your Address:
         <Address
-            value={address}
+            address={address}
             ensProvider={mainnetProvider}
             fontSize={16}
         />
@@ -45,7 +45,7 @@ export default function ExampleUI({purpose, setPurposeEvents, address, mainnetPr
 
         ENS Address Example:
         <Address
-          value={"0x34aA3F359A9D614239015126635CE7732c18fDF3"} /* this will show as austingriffith.eth */
+          address={"0x34aA3F359A9D614239015126635CE7732c18fDF3"} /* this will show as austingriffith.eth */
           ensProvider={mainnetProvider}
           fontSize={16}
         />
@@ -55,12 +55,22 @@ export default function ExampleUI({purpose, setPurposeEvents, address, mainnetPr
         {  /* use formatEther to display a BigNumber: */ }
         <h2>Your Balance: {yourLocalBalance?formatEther(yourLocalBalance):"..."}</h2>
 
-        OR
+        <div>OR</div>
 
         <Balance
           address={address}
           provider={localProvider}
-          dollarMultiplier={price}
+          price={price}
+        />
+
+        <Divider/>
+
+        <div>🐳  Example Whale Balance:</div>
+
+        <Balance
+          balance={parseEther("1000")}
+          provider={localProvider}
+          price={price}
         />
 
         <Divider/>
@@ -75,7 +85,7 @@ export default function ExampleUI({purpose, setPurposeEvents, address, mainnetPr
 
         Your Contract Address:
         <Address
-            value={readContracts?readContracts.YourContract.address:readContracts}
+            address={readContracts?readContracts.YourContract.address:readContracts}
             ensProvider={mainnetProvider}
             fontSize={16}
         />
@@ -141,7 +151,7 @@ export default function ExampleUI({purpose, setPurposeEvents, address, mainnetPr
             return (
               <List.Item key={item.blockNumber+"_"+item.sender+"_"+item.purpose}>
                 <Address
-                    value={item[0]}
+                    address={item[0]}
                     ensProvider={mainnetProvider}
                     fontSize={16}
                   /> =>
