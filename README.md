@@ -1,14 +1,13 @@
-
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
-
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://github.com/rastakms/shambit-contracts/raw/master/logo.png" width="400"></a></p>
 <p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+<a href=""><img src="https://img.shields.io/github/downloads/rastakms/shambit-contracts/total" alt="License"></a><a href=""><img src="https://img.shields.io/github/issues-pr/rastakms/shambit-contracts" alt="License"></a>
+<a href=""><img src="https://img.shields.io/github/issues-closed/rastakms/shambit-contracts" alt="License"></a>
+<a href=""><img src="https://img.shields.io/github/license/rastakms/shambit-contracts" alt="License"></a>
+<a href=""><img src="https://img.shields.io/github/last-commit/rastakms/shambit-contracts" alt="License"></a>
+
+Decentralized  digital  ecosystem made by athletes
+
 </p>
-
-
 
 # 🏗 Shambit DAPP
 
@@ -21,7 +20,7 @@
 ```bash
 git clone
 
-cd 
+cd
 ```
 
 ```bash
@@ -39,7 +38,7 @@ yarn start
 > in a second terminal window:
 
 ```bash
-cd  
+cd
 yarn chain
 
 ```
@@ -47,7 +46,7 @@ yarn chain
 > in a third terminal window:
 
 ```bash
-cd  
+cd
 yarn deploy
 
 ```
