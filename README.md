@@ -15,7 +15,7 @@ Decentralized  digital  ecosystem made by athletes
 
 ---
 
-## quickstart
+## Quickstart
 
 ```bash
 git clone
@@ -50,3 +50,15 @@ cd
 yarn deploy
 
 ```
+## Useful scripts
+
+Approve some SBT token in order to using in create event phase:
+```bash
+yarn approveSBT
+```
+
+Easy  and fast way to create event with default value :
+```bash
+yarn addPublicEvent
+```
+
