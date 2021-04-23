@@ -8,7 +8,9 @@ const R = require("ramda");
 const main = async () => {
   console.log("\n\n 📡 Deploying...\n");
 
-  const shambitToken = await deploy("ShambitToken", [1000000]);
+  const argsShambitToken= [1000000]
+
+  const shambitToken = await deploy("ShambitToken", argsShambitToken);
   const args= [shambitToken.address]
   const yourContract = await deploy("Shambit", args); // <-- add in constructor args like line 19 vvvv
 
@@ -57,6 +59,10 @@ const main = async () => {
   await run("verify:verify", {
     address: yourContract.address,
     constructorArguments: args // If your contract has constructor arguments, you can pass them as an array
+  })
+  await run("verify:verify", {
+    address: shambitToken.address,
+    constructorArguments: argsShambitToken // If your contract has constructor arguments, you can pass them as an array
   })
   
 
