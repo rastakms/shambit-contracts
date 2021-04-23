@@ -5,13 +5,10 @@
 <a href=""><img src="https://img.shields.io/github/license/rastakms/shambit-contracts" alt="License"></a>
 <a href=""><img src="https://img.shields.io/github/last-commit/rastakms/shambit-contracts" alt="License"></a>
 
-Decentralized  digital  ecosystem made by athletes
+Decentralized  digital  ecosystem made by athletes.
 
 </p>
 
-# 🏗 Shambit DAPP
-
-> is everything you need to get started building decentralized applications powered by smart contracts
 
 ---
 
@@ -62,3 +59,8 @@ Easy  and fast way to create event with default value :
 yarn addPublicEvent
 ```
 
+
+
+<p align="center">
+Powered by  <a href="https://github.com/austintgriffith/scaffold-eth" target="_blank"> scaffold-eth</a> | Feel free to pull a request
+</p>
