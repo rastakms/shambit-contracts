@@ -62,5 +62,5 @@ yarn addPublicEvent
 
 
 <p align="center">
-Powered by  <a href="https://github.com/austintgriffith/scaffold-eth" target="_blank"> scaffold-eth</a> | Feel free to pull a request
+Powered by  <a href="https://github.com/austintgriffith/scaffold-eth" target="_blank"> scaffold-eth</a> | Feel free to make a  pull  request
 </p>
