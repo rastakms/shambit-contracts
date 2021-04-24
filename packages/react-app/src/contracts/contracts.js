@@ -1,1 +1,1 @@
-module.exports = ["Shambit","ShambitToken"];
+module.exports = ["MiniMeToken","Shambit"];

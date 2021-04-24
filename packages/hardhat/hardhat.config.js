@@ -23,7 +23,7 @@ const { isAddress, getAddress, formatUnits, parseUnits } = utils;
 //
 // Select the network you want to deploy to here:
 //
-const defaultNetwork = "kovan";
+const defaultNetwork = "rinkeby";
 
 function mnemonic() {
   try {
@@ -135,6 +135,14 @@ module.exports = {
       },
       {
         version: "0.6.7",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200
+          }
+        }
+      },{
+        version: "0.4.18",
         settings: {
           optimizer: {
             enabled: true,

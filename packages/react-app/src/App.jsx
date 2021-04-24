@@ -36,7 +36,7 @@ import { INFURA_ID, DAI_ADDRESS, DAI_ABI, NETWORK, NETWORKS } from "./constants"
 
 
 /// 📡 What chain are your contracts deployed to?
-const targetNetwork = NETWORKS['kovan']; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
+const targetNetwork = NETWORKS['rinkeby']; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
 
 // 😬 Sorry for all the console logging
 const DEBUG = true
@@ -247,13 +247,20 @@ function App(props) {
               mainnetProvider={mainnetProvider}
               AddEventEvent={AddEventEvent}
             />
-            <Contract
-              name="ShambitToken"
+              <Contract
+              name="MiniMeToken"
               signer={userProvider.getSigner()}
               provider={localProvider}
               address={address}
               blockExplorer={blockExplorer}
             />
+            {/* <Contract
+              name="ShambitToken"
+              signer={userProvider.getSigner()}
+              provider={localProvider}
+              address={address}
+              blockExplorer={blockExplorer}
+            /> */}
 
 
             { /* uncomment for a second contract:
